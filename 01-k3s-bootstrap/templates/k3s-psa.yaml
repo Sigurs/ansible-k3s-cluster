@@ -18,4 +18,4 @@ plugins:
     exemptions:
       usernames: []
       runtimeClasses: []
-      namespaces: [kube-system, infra-system-upgrade, infra-hcloud, infra-cilium]
+      namespaces: [kube-system, system-upgrade, infra-system-upgrade, infra-hcloud, infra-cilium, stackrox]

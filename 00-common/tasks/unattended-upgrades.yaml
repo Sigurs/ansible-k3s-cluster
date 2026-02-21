@@ -1,6 +1,6 @@
-- name: Install unattended-upgradces
+- name: Install unattended-upgrades
   ansible.builtin.package:
     name:
       - unattended-upgrades
     state: latest
-  notify: enable and restart firewalld
+  notify: enable and restart unattended-upgrades

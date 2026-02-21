@@ -1,7 +1,8 @@
-- name: UFW Restart
+- name: enable and restart ufw
   ansible.builtin.systemd:
     name: ufw
     state: restarted
+    enabled: yes
     daemon_reload: yes
 
 - name: enable and restart unattended-upgrades

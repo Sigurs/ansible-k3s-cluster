@@ -53,7 +53,7 @@
   when: helm_chart_info.status is not defined
 
 - name: Wait for kubectl to connect to API
-  shell: kubectl version
+  command: kubectl version
   register: kubectl_version
   until: kubectl_version.rc == 0
   retries: 60

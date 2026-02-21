@@ -1,0 +1,52 @@
+// Unattended-upgrades configuration for k3s cluster (Ubuntu)
+// Automatically install security updates and reboot if needed
+
+// Ubuntu - automatically install security updates only
+Unattended-Upgrade::Allowed-Origins {
+    "${distro_id}:${distro_codename}-security";
+};
+
+// List of packages to not update
+Unattended-Upgrade::Package-Blacklist {
+};
+
+// Run upgrades automatically (daily)
+Unattended-Upgrade::AutoFixInterruptedDpkg "true";
+Unattended-Upgrade::MinimalSteps "true";
+Unattended-Upgrade::InstallOnShutdown "false";
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+Unattended-Upgrade::Automatic-Reboot "true";
+
+// Generate randomized reboot time between 02:00 and 02:59 based on hostname
+{% set reboot_minute = (inventory_hostname | hash('sha256') | int(base=16) % 60) %}
+{% set reboot_time = "02:" ~ reboot_minute ~ ":00" %}
+Unattended-Upgrade::Automatic-Reboot-Time "{{ reboot_time }}";
+
+// Allow reboot even with users logged in (for automated systems)
+Unattended-Upgrade::Automatic-Reboot-WithUsers "true";
+
+// Use dpkg options for non-interactive updates
+Unattended-Upgrade::Dpkg::Options {
+    "--force-confdef";
+    "--force-confold";
+};
+
+// Verbose output (can be enabled for debugging)
+Unattended-Upgrade::Verbose "false";
+
+// Logging configuration
+Unattended-Upgrade::SyslogEnable "true";
+Unattended-Upgrade::SyslogFacility "daemon";
+
+// Email notifications (disabled by default, enable if needed)
+Unattended-Upgrade::Mail "";
+Unattended-Upgrade::MailOnlyOnError "true";
+
+// Do not remove unused dependencies that are recommended by installed packages
+Unattended-Upgrade::Keep-Debs-After-Install "false";
+Unattended-Upgrade::Skip-Updates-On-Metered-Connections "true";
+
+// Allow automatic removal of new packages that were dependencies
+APT::Get::Upgrade-Allow-New "false";
+APT::Get::Autoremove "true";
